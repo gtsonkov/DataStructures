@@ -1,6 +1,7 @@
 package implementations;
 
 import interfaces.List;
+import org.apache.xerces.xs.ItemPSVI;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -33,12 +34,23 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public boolean add(int index, E element) {
-        return false;
+        if (!indexInRange(index)) {
+            return false;
+        }
+
+        shiftRight(index);
+        elements[index] = element;
+
+        return true;
     }
 
     @Override
     public E get(int index) {
-        return null;
+        if (!indexInRange(index)) {
+            throw new IndexOutOfBoundsException("Index out of range.");
+        }
+
+        return (E)this.elements[index];
     }
 
     @Override
@@ -83,5 +95,16 @@ public class ArrayList<E> implements List<E> {
         }
 
         this.elements = tmp;
+    }
+
+    private boolean indexInRange(int index){
+
+        return (index >= 0 && index < size);
+    }
+
+    private void shiftRight(int index) {
+        for (int i = size; i > index ; i--) {
+            this.elements[i] = this.elements[i-1];
+        }
     }
 }
