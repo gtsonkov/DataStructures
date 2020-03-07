@@ -79,7 +79,7 @@ public class ArrayList<E> implements List<E> {
     private void resize(){
         Object[] tmp = new Object[this.elements.length*2];
         for (int i = 0; i < elements.length ; i++) {
-           tmp[i] = elements[i];
+            tmp[i] = elements[i];
         }
 
         this.elements = tmp;
