@@ -7,9 +7,28 @@ import java.util.Iterator;
 
 public class ArrayList<E> implements List<E> {
 
+    public  static final  int InitialSize = 4;
+
+    private Object[] elements;
+
+    private int size;
+
+    public  ArrayList(){
+        this.elements = new Object[InitialSize];
+        this.size = 0;
+    }
+
     @Override
     public boolean add(E element) {
-        return false;
+
+        if (this.size == elements.length){
+            resize();
+        }
+
+        this.elements[this.size] = element;
+        this.size++;
+
+        return true;
     }
 
     @Override
@@ -55,5 +74,14 @@ public class ArrayList<E> implements List<E> {
     @Override
     public Iterator<E> iterator() {
         return null;
+    }
+
+    private void resize(){
+        Object[] tmp = new Object[this.elements.length*2];
+        for (int i = 0; i < elements.length ; i++) {
+           tmp[i] = elements[i];
+        }
+
+        this.elements = tmp;
     }
 }
