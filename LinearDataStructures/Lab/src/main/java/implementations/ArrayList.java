@@ -1,9 +1,7 @@
 package implementations;
 
 import interfaces.List;
-import org.apache.xerces.xs.ItemPSVI;
 
-import java.util.Arrays;
 import java.util.Iterator;
 
 public class ArrayList<E> implements List<E> {
@@ -23,7 +21,7 @@ public class ArrayList<E> implements List<E> {
     public boolean add(E element) {
 
         if (this.size == elements.length){
-            resize();
+            growSize();
         }
 
         this.elements[this.size] = element;
@@ -37,64 +35,99 @@ public class ArrayList<E> implements List<E> {
         if (!indexInRange(index)) {
             return false;
         }
+        if(elements.length == size) {
+            growSize();
+        }
+
 
         shiftRight(index);
-        elements[index] = element;
-
+        this.elements[index] = element;
+        this.size++;
         return true;
     }
 
     @Override
     public E get(int index) {
-        if (!indexInRange(index)) {
-            throw new IndexOutOfBoundsException("Index out of range.");
-        }
+        ensureIndex(index);
 
         return (E)this.elements[index];
     }
 
     @Override
     public E set(int index, E element) {
-        return null;
+        ensureIndex(index);
+
+        E oldElement = (E)this.elements[index];
+
+        this.elements[index] = element;
+        return oldElement;
     }
 
     @Override
     public E remove(int index) {
-        return null;
+        ensureIndex(index);
+
+        E oldElement = (E)this.elements[index];
+
+        shiftLeft(index);
+        size--;
+
+        ensureCapacity();
+
+        return oldElement;
     }
 
     @Override
     public int size() {
-        return 0;
+        return this.size;
     }
 
     @Override
     public int indexOf(E element) {
-        return 0;
+        for (int i = 0; i < size ; i++) {
+            if (this.elements[i].equals(element)){
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public boolean contains(E element) {
-        return false;
+        return this.indexOf(element) != -1;
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return this.size == 0;
     }
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<E>() {
+            private int index = 0;
+            @Override
+            public boolean hasNext() {
+                    return index < size();
+            }
+
+            @Override
+            public E next() {
+                return get(index++);
+            }
+        };
     }
 
-    private void resize(){
-        Object[] tmp = new Object[this.elements.length*2];
-        for (int i = 0; i < elements.length ; i++) {
-            tmp[i] = elements[i];
+    private void ensureIndex(int index) {
+        if (!indexInRange(index)) {
+            throw new IndexOutOfBoundsException("Index out of range.");
         }
+    }
 
-        this.elements = tmp;
+    private  void ensureCapacity() {
+        if (this.size < (this.elements.length /3 )){
+            shrink();
+        }
     }
 
     private boolean indexInRange(int index){
@@ -102,9 +135,33 @@ public class ArrayList<E> implements List<E> {
         return (index >= 0 && index < size);
     }
 
+    private void growSize(){
+        Object[] tmp = new Object[this.elements.length*2];
+        for (int i = 0; i < this.elements.length ; i++) {
+            tmp[i] = elements[i];
+        }
+
+        this.elements = tmp;
+    }
+
+    private void shiftLeft(int index){
+        for (int i = index; i < this.size -1 ; i++) {
+            this.elements[i] = this.elements[i+1];
+        }
+    }
+
     private void shiftRight(int index) {
         for (int i = size; i > index ; i--) {
             this.elements[i] = this.elements[i-1];
         }
+    }
+
+    private  void shrink() {
+        Object[] tmp = new Object[(this.elements.length/3)+1];
+        for (int i = 0; i < size ; i++) {
+            tmp[i] = this.elements[i];
+        }
+
+        this.elements = tmp;
     }
 }
