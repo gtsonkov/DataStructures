@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/LinearDataStructures.iml" filepath="$PROJECT_DIR$/.idea/LinearDataStructures.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LinearDS.iml" filepath="$PROJECT_DIR$/LinearDS.iml" />
     </modules>
   </component>
 </project>
