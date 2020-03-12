@@ -25,12 +25,10 @@ public class Queue<E> implements AbstractQueue<E> {
         Node<E> newNode = new Node<>(element);
         if (this.top == null) {
             this.top = newNode;
+            this.last = newNode;
         } else {
-            Node<E> current = this.top;
-            while (current.next != null) {
-                current = current.next;
-            }
-            current.next = newNode;
+            this.last.next = newNode;
+            this.last = newNode;
         }
         this.size++;
     }
@@ -41,6 +39,7 @@ public class Queue<E> implements AbstractQueue<E> {
         E element = this.top.element;
         if (this.size == 1) {
             this.top = null;
+            this.last = null;
         } else {
             Node<E> next = this.top.next;
             this.top.next = null;
