@@ -23,7 +23,7 @@ public class ArrayDeque<E> implements Deque<E> {
             this.elements[tail] = Element;
         } else {
             CheckCapacity(tail);
-            this.elements[(++this.tail)] = Element;
+            this.elements[++this.tail] = Element;
         }
 
         size++;
@@ -138,13 +138,22 @@ public class ArrayDeque<E> implements Deque<E> {
 
     private void GrowUp(){
         Object[] temp = new Object[(this.elements.length*2)+1];
+
         int middle = (temp.length / 2);
         int begin = middle - (this.size / 2);
         int position = this.head;
-        for (int i = begin; position <= tail; i++) {
+
+        for (int i = begin; position <= this.tail; i++) {
             temp[i] = this.elements[position];
             position++;
         }
+        if (size%2 == 0){
+            this.tail = middle + (size/2)-1;
+        } else {
+            this.tail = middle + (size/2);
+        }
+        this.head = begin;
+
         this.elements = temp;
     }
 }
