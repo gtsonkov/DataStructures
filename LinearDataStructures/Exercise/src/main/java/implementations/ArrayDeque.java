@@ -19,19 +19,12 @@ public class ArrayDeque<E> implements Deque<E> {
     }
     @Override
     public void add(E Element) {
-        if (this.size == 0) {
-            this.elements[tail] = Element;
-        } else {
-            CheckCapacity(tail);
-            this.elements[++this.tail] = Element;
-        }
-
-        size++;
+        AddElementToTail(Element);
     }
 
     @Override
     public void offer(E element) {
-
+        AddElementToTail(element);
     }
 
     @Override
@@ -129,6 +122,16 @@ public class ArrayDeque<E> implements Deque<E> {
         return null;
     }
 
+    private void AddElementToTail(E Element){
+        if (this.size == 0) {
+            this.elements[tail] = Element;
+        } else {
+            CheckCapacity(tail);
+            this.elements[++this.tail] = Element;
+        }
+        size++;
+    }
+
     private void CheckCapacity(int position)
     {
         if (position == this.elements.length - 1 | position == 0){
@@ -147,11 +150,8 @@ public class ArrayDeque<E> implements Deque<E> {
             temp[i] = this.elements[position];
             position++;
         }
-        if (size%2 == 0){
-            this.tail = middle + (size/2)-1;
-        } else {
-            this.tail = middle + (size/2);
-        }
+
+        this.tail = (this.head + this.size) - 1;
         this.head = begin;
 
         this.elements = temp;
