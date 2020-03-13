@@ -14,5 +14,12 @@ public class ArrayDequeTest {
         deque.add(4);
         deque.add(5);
         deque.add(6);
+        deque.addFirst(0);
+        deque.addFirst(5);
+        deque.addFirst(4);
+        deque.addFirst(3);
+        deque.addFirst(2);
+        deque.addFirst(1);
+        deque.addFirst(0);
     }
 }

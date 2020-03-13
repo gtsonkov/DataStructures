@@ -17,6 +17,7 @@ public class ArrayDeque<E> implements Deque<E> {
         head = Def_Capacity /2;
         tail = head;
     }
+
     @Override
     public void add(E Element) {
         AddElementToTail(Element);
@@ -29,17 +30,17 @@ public class ArrayDeque<E> implements Deque<E> {
 
     @Override
     public void addFirst(E element) {
-
+        AddElementToHead(element);
     }
 
     @Override
     public void addLast(E element) {
-
-    }
+        AddElementToTail(element);
+}
 
     @Override
     public void push(E element) {
-
+        AddElementToTail(element);
     }
 
     @Override
@@ -122,6 +123,16 @@ public class ArrayDeque<E> implements Deque<E> {
         return null;
     }
 
+    private void AddElementToHead(E Element){
+        if (this.size == 0) {
+            this.elements[head] = Element;
+        } else {
+            CheckCapacity(head);
+            this.elements[--this.head] = Element;
+        }
+        size++;
+    }
+
     private void AddElementToTail(E Element){
         if (this.size == 0) {
             this.elements[tail] = Element;
@@ -129,12 +140,12 @@ public class ArrayDeque<E> implements Deque<E> {
             CheckCapacity(tail);
             this.elements[++this.tail] = Element;
         }
-        size++;
+        this.size++;
     }
 
     private void CheckCapacity(int position)
     {
-        if (position == this.elements.length - 1 | position == 0){
+        if (position == this.elements.length - 1 || position == 0){
             GrowUp();
         }
     }
@@ -149,10 +160,11 @@ public class ArrayDeque<E> implements Deque<E> {
         for (int i = begin; position <= this.tail; i++) {
             temp[i] = this.elements[position];
             position++;
+
         }
 
-        this.tail = (this.head + this.size) - 1;
         this.head = begin;
+        this.tail = (this.head + this.size) - 1;
 
         this.elements = temp;
     }
