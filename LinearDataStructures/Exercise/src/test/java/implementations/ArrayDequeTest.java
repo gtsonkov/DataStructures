@@ -13,7 +13,7 @@ public class ArrayDequeTest {
         deque.add(3);
         deque.add(4);
         deque.add(5);
-        deque.add(6);
+        deque.add(16);
         deque.addFirst(0);
         deque.addFirst(5);
         deque.addFirst(4);
@@ -21,5 +21,9 @@ public class ArrayDequeTest {
         deque.addFirst(2);
         deque.addFirst(1);
         deque.addFirst(0);
+        int test = 1;
+        Object ss = (Integer) test;
+        int a = deque.remove(ss);
+        deque.insert(11,100);
     }
 }
