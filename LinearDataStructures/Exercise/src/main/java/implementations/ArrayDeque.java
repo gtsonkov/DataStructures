@@ -46,21 +46,21 @@ public class ArrayDeque<E> implements Deque<E> {
     @Override
     public void insert(int index, E element) {
         int internIndex = this.head + index;
-        ensureIsValid(internIndex);
-        CheckCapacity(internIndex);
-        for (int i = tail+1; i > internIndex ; i--) {
+        ensureIsValidIndex(internIndex);
+        
+        E tempTail = GetAt(this.tail);
+        for (int i = tail; i > internIndex ; i--) {
 
             this.elements[i] = this.elements[i-1];
         }
         this.elements[internIndex] = element;
-        this.tail++;
-        this.size++;
+        addLast(tempTail);
     }
 
     @Override
     public void set(int index, E element) {
         int internIndex = this.head + index;
-        ensureIsValid(internIndex);
+        ensureIsValidIndex(internIndex);
         this.elements[internIndex] = element;
     }
 
@@ -79,19 +79,23 @@ public class ArrayDeque<E> implements Deque<E> {
 
     @Override
     public E pop() {
-        return removeLast();
+        return removeFirst();
     }
 
     @Override
     public E get(int index) {
         int internIndex = this.head + index;
-        ensureIsValid(internIndex);
+        ensureIsValidIndex(internIndex);
 
         return GetAt(internIndex);
     }
 
     @Override
     public E get(Object object) {
+        if (isEmpty()){
+            return null;
+        }
+
         int indexOf = SearchElement(object);
         if (indexOf == -1){
             return  null;
@@ -102,7 +106,7 @@ public class ArrayDeque<E> implements Deque<E> {
     @Override
     public E remove(int index) {
         int internIndex = this.head + index;
-        ensureIsValid(internIndex);
+        ensureIsValidIndex(internIndex);
 
         E element = GetAt(internIndex);
         RemoveElement(internIndex);
@@ -112,10 +116,16 @@ public class ArrayDeque<E> implements Deque<E> {
 
     @Override
     public E remove(Object object) {
+
+        if (isEmpty()){
+            return null;
+        }
+
         int indexOf = SearchElement(object);
         if (indexOf == -1){
             return  null;
         }
+
         E element = GetAt(indexOf);
         RemoveElement(indexOf);
         return element;
@@ -161,7 +171,12 @@ public class ArrayDeque<E> implements Deque<E> {
 
     @Override
     public void trimToSize() {
-
+        Object[] temp = new Object[this.size];
+        int index = 0;
+        for (int i = this.head; i < this.tail ; i++) {
+            temp[index++] = this.elements[i];
+        }
+        this.elements = temp;
     }
 
     @Override
@@ -175,7 +190,7 @@ public class ArrayDeque<E> implements Deque<E> {
             private int index = head;
             @Override
             public boolean hasNext() {
-                return index < tail ;
+                return index <= tail ;
             }
 
             @Override
@@ -212,7 +227,7 @@ public class ArrayDeque<E> implements Deque<E> {
         }
     }
 
-    private void ensureIsValid(int index){
+    private void ensureIsValidIndex(int index){
 
         if (index < this.head || index > this.tail){
             throw new IndexOutOfBoundsException("Index out of bound for index: " + (index - this.head));
@@ -255,8 +270,6 @@ public class ArrayDeque<E> implements Deque<E> {
         for (int i = index; i < this.tail ; i++) {
             this.elements[i] = this.elements[i+1];
         }
-        elements[this.tail] = null;
-        this.tail--;
-        this.size--;
+        removeLast();
     }
 }
