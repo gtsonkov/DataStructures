@@ -1,9 +1,9 @@
 package interfaces;
 
 public interface ReversedList<E> extends Iterable<E> {
-  void Add(E element);
-  int Size();
-  int Capacity();
-  E Get(E index);
-  void RemoveAt(int index);
+  void add(E element);
+  int size();
+  int capacity();
+  E get(int index);
+  E removeAt(int index);
 }
