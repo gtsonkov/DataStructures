@@ -47,7 +47,7 @@ public class ReversedList<E> implements interfaces.ReversedList<E> {
         {
             throw new IllegalArgumentException();
         }
-        int realIndex = GetRealIndex(index);
+        int realIndex = index;
         E element = GetAt(realIndex);
         RemoveElement(realIndex);
         return element;

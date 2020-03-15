@@ -49,4 +49,18 @@ public class ReversedListTest {
             System.out.println(elment);
         }
     }
+
+    @Test
+    public void testReamoveAt_extra() {
+        ReversedList<Integer> myList_extra = new ReversedList();
+        myList_extra.add(1);
+        myList_extra.add(2);
+        myList_extra.add(3);
+        myList_extra.add(4);
+        myList_extra.add(5);
+        myList_extra.removeAt(1);
+        for (int elment: myList_extra) {
+            System.out.println(elment);
+        }
+    }
 }
