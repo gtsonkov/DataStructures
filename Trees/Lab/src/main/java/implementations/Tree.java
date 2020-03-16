@@ -2,10 +2,7 @@ package implementations;
 
 import interfaces.AbstractTree;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 public class Tree<E> implements AbstractTree<E> {
 
@@ -48,7 +45,10 @@ public class Tree<E> implements AbstractTree<E> {
 
     @Override
     public List<E> orderDfs() {
-        return null;
+        ArrayList<E> result = new ArrayList<>();
+
+         doDfs(this, result);
+        return result;
     }
 
     @Override
@@ -65,7 +65,12 @@ public class Tree<E> implements AbstractTree<E> {
     public void swap(E firstKey, E secondKey) {
 
     }
+
+    private void doDfs(Tree<E> node, List<E> result){
+        for (Tree<E> child : node.childern ){
+            doDfs(child,result);
+        }
+
+        result.add(node._value);
+    }
 }
-
-
-
