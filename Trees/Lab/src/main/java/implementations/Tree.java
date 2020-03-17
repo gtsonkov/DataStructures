@@ -22,12 +22,16 @@ public class Tree<E> implements AbstractTree<E> {
         this.childern = new ArrayList<>();
         for (Tree<E> subtree: subtrees) {
             this.childern.add(subtree);
+            subtree.parent = this;
         }
     }
 
     @Override
     public List<E> orderBfs() {
         ArrayList<E> result = new ArrayList<>();
+        if(this._value == null){
+            return result;
+        }
         ArrayDeque<Tree<E>> childrenQueue = new ArrayDeque<>();
 
        childrenQueue.offer(this);
@@ -63,7 +67,19 @@ public class Tree<E> implements AbstractTree<E> {
 	
 	@Override
     public void removeNode(E nodeKey) {
+        Tree<E> result = search(nodeKey);
+        if (result == null){
+            throw  new IllegalArgumentException();
+        }
 
+        for (Tree<E> child:result.childern){
+            child.parent = null;
+        }
+        result.childern.clear();
+        if (result.parent != null){
+            Tree<E> parent = result.parent;
+            parent.childern.remove(result);
+        }
     }
 
     @Override
@@ -86,10 +102,10 @@ public class Tree<E> implements AbstractTree<E> {
 
         while (!childrenQueue.isEmpty()){
             Tree<E> current = childrenQueue.poll();
-            if (current._value == parenKey){
+            if (current._value.equals(parenKey)){
                 return current;
             }
-            
+
             for (Tree<E> child : current.childern) {
                 childrenQueue.offer(child);
             }
