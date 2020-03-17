@@ -53,7 +53,12 @@ public class Tree<E> implements AbstractTree<E> {
 
     @Override
     public void addChild(E parentKey, Tree<E> child) {
-
+        Tree<E> result = search(parentKey);
+        if (result == null){
+            throw  new IllegalArgumentException();
+        }
+        result.childern.add(child);
+        child.parent = result;
     }
 	
 	@Override
@@ -72,5 +77,23 @@ public class Tree<E> implements AbstractTree<E> {
         }
 
         result.add(node._value);
+    }
+
+    private Tree<E> search (E parenKey){
+        ArrayDeque<Tree<E>> childrenQueue = new ArrayDeque<>();
+
+        childrenQueue.offer(this);
+
+        while (!childrenQueue.isEmpty()){
+            Tree<E> current = childrenQueue.poll();
+            if (current._value == parenKey){
+                return current;
+            }
+            
+            for (Tree<E> child : current.childern) {
+                childrenQueue.offer(child);
+            }
+        }
+        return null;
     }
 }
