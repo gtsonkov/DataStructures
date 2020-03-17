@@ -96,24 +96,14 @@ public class Tree<E> implements AbstractTree<E> {
         Tree<E> firstParent = firstNode.parent;
         Tree<E> secondParent = secondNode.parent;
 
-        Tree<E> firstContainSecond = search(firstNode,secondKey);
-        if (firstContainSecond != null){
-            if (firstNode.parent == null){
+        if (firstNode.parent == null){
                 swapRoot(secondNode);
                 return;
-            }
-            swapParentWithChild(firstNode,secondNode);
-            return;
         }
 
-        Tree<E> secondContainFirst = search(secondNode,firstKey);
-        if(secondContainFirst!= null){
-            if (secondNode.parent == null){
+        if (secondNode.parent == null){
                 swapRoot(firstNode);
                 return;
-            }
-            swapParentWithChild(secondNode,firstNode);
-            return;
         }
 
         int firstIndex = firstParent.childern.indexOf(firstNode);
@@ -154,13 +144,5 @@ public class Tree<E> implements AbstractTree<E> {
         this.parent = null;
         this.childern = node.childern;
         node.parent = null;
-    }
-
-    private void swapParentWithChild(Tree<E> parent, Tree<E> child){
-        Tree<E> parenFromParent = parent.parent;
-        child.parent = parenFromParent;
-        int getIndexOfChild = parenFromParent.childern.indexOf(parent);
-        parenFromParent.childern.set(getIndexOfChild,child);
-        parent.childern.clear();
     }
 }
