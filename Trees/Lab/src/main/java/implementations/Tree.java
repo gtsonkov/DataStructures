@@ -32,6 +32,7 @@ public class Tree<E> implements AbstractTree<E> {
         if(this._value == null){
             return result;
         }
+
         ArrayDeque<Tree<E>> childrenQueue = new ArrayDeque<>();
 
        childrenQueue.offer(this);
@@ -79,12 +80,18 @@ public class Tree<E> implements AbstractTree<E> {
         if (result.parent != null){
             Tree<E> parent = result.parent;
             parent.childern.remove(result);
+        }else {
+            result._value = null;
         }
     }
 
     @Override
     public void swap(E firstKey, E secondKey) {
-
+        Tree<E>firstNode = search(firstKey);
+        Tree<E>secondNode = search(secondKey);
+        if (firstKey == null || secondKey == null){
+            throw new IllegalArgumentException();
+        }
     }
 
     private void doDfs(Tree<E> node, List<E> result){
