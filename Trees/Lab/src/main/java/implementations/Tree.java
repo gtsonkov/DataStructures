@@ -58,7 +58,7 @@ public class Tree<E> implements AbstractTree<E> {
 
     @Override
     public void addChild(E parentKey, Tree<E> child) {
-        Tree<E> result = search(parentKey);
+        Tree<E> result = search(this, parentKey);
         if (result == null){
             throw  new IllegalArgumentException();
         }
@@ -68,7 +68,7 @@ public class Tree<E> implements AbstractTree<E> {
 	
 	@Override
     public void removeNode(E nodeKey) {
-        Tree<E> result = search(nodeKey);
+        Tree<E> result = search(this, nodeKey);
         if (result == null){
             throw  new IllegalArgumentException();
         }
@@ -87,11 +87,40 @@ public class Tree<E> implements AbstractTree<E> {
 
     @Override
     public void swap(E firstKey, E secondKey) {
-        Tree<E>firstNode = search(firstKey);
-        Tree<E>secondNode = search(secondKey);
+        Tree<E>firstNode = search(this, firstKey);
+        Tree<E>secondNode = search(this, secondKey);
         if (firstKey == null || secondKey == null){
             throw new IllegalArgumentException();
         }
+
+        Tree<E> firstParent = firstNode.parent;
+        Tree<E> secondParent = secondNode.parent;
+
+        Tree<E> firstContainSecond = search(firstNode,secondKey);
+        if (firstContainSecond != null){
+            if (firstNode.parent == null){
+                swapRoot(secondNode);
+                return;
+            }
+            swapParentWithChild(firstNode,secondNode);
+            return;
+        }
+
+        Tree<E> secondContainFirst = search(secondNode,firstKey);
+        if(secondContainFirst!= null){
+            if (secondNode.parent == null){
+                swapRoot(firstNode);
+                return;
+            }
+            swapParentWithChild(secondNode,firstNode);
+            return;
+        }
+
+        int firstIndex = firstParent.childern.indexOf(firstNode);
+        int secondIndex = secondParent.childern.indexOf(secondNode);
+
+        firstParent.childern.set(firstIndex,secondNode);
+        secondParent.childern.set(secondIndex,firstNode);
     }
 
     private void doDfs(Tree<E> node, List<E> result){
@@ -102,10 +131,10 @@ public class Tree<E> implements AbstractTree<E> {
         result.add(node._value);
     }
 
-    private Tree<E> search (E parenKey){
+    private Tree<E> search (Tree<E> tree ,E parenKey){
         ArrayDeque<Tree<E>> childrenQueue = new ArrayDeque<>();
 
-        childrenQueue.offer(this);
+        childrenQueue.offer(tree);
 
         while (!childrenQueue.isEmpty()){
             Tree<E> current = childrenQueue.poll();
@@ -118,5 +147,20 @@ public class Tree<E> implements AbstractTree<E> {
             }
         }
         return null;
+    }
+
+    private void swapRoot(Tree<E> node){
+        this._value = node._value;
+        this.parent = null;
+        this.childern = node.childern;
+        node.parent = null;
+    }
+
+    private void swapParentWithChild(Tree<E> parent, Tree<E> child){
+        Tree<E> parenFromParent = parent.parent;
+        child.parent = parenFromParent;
+        int getIndexOfChild = parenFromParent.childern.indexOf(parent);
+        parenFromParent.childern.set(getIndexOfChild,child);
+        parent.childern.clear();
     }
 }
