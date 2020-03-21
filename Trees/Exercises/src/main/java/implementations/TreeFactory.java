@@ -1,5 +1,7 @@
 package implementations;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -11,6 +13,11 @@ public class TreeFactory {
     }
 
     public Tree<Integer> createTreeFromStrings(String[] input) {
+        for (String part:input) {
+           int[]currKeys = Arrays.stream(part.split("\\s+"))
+                    .mapToInt(Integer::parseInt)
+                    .toArray();
+        }
         return null;
     }
 
