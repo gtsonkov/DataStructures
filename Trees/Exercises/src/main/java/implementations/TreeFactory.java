@@ -17,8 +17,11 @@ public class TreeFactory {
            int[]currKeys = Arrays.stream(part.split("\\s+"))
                     .mapToInt(Integer::parseInt)
                     .toArray();
+           int parentKey = currKeys[0];
+           int childKey = currKeys[1];
+           this.addEdge(parentKey,childKey);
         }
-        return null;
+        return getRoot();
     }
 
     private Tree<Integer> getRoot() {
@@ -26,11 +29,15 @@ public class TreeFactory {
     }
 
     public Tree<Integer> createNodeByKey(int key) {
-        return null;
+        this.nodesByKeys.putIfAbsent(key, new Tree<>(key));
+        return this.nodesByKeys.get(key);
     }
 
     public void addEdge(int parent, int child) {
-
+        Tree<Integer> parentByKey = this.createNodeByKey(parent);
+        Tree<Integer> childByKey = this.createNodeByKey(child);
+        childByKey.setParent(parentByKey);
+        parentByKey.addChild(childByKey);
     }
 }
 
