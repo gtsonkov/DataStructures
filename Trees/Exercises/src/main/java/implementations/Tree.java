@@ -2,8 +2,11 @@ package implementations;
 
 import interfaces.AbstractTree;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Tree<E> implements AbstractTree<E> {
     private E key;
@@ -46,12 +49,16 @@ public class Tree<E> implements AbstractTree<E> {
         return sb.toString().trim();
     }
 
-    private void traverseTreeWithRecurtion(StringBuilder sb, int intent, Tree<E> eTree) {
+    private void traverseTreeWithRecurtion(StringBuilder sb, int ident, Tree<E> eTree) {
 
         sb
-                .append(this.getPadding(intent))
+                .append(this.getPadding(ident))
                 .append(eTree.getKey())
                 .append(System.lineSeparator());
+
+        for (Tree<E> child : eTree._children ) {
+            traverseTreeWithRecurtion(sb,(ident+2),child);
+        }
     }
 
     private String getPadding(int size){
@@ -60,11 +67,32 @@ public class Tree<E> implements AbstractTree<E> {
             sb.append(" ");
         }
         return sb.toString();
-            }
+    }
 
     @Override
     public List<E> getLeafKeys() {
-        return null;
+       return getLeafNodesBFS()
+               .stream()
+               .map(Tree::getKey)
+               .collect((Collectors.toList()));
+    }
+
+    private List<Tree<E>> getLeafNodesBFS(){
+        Deque<Tree<E>> queue = new ArrayDeque<>();
+        queue.offer(this);
+        List<Tree<E>> allNodes = new ArrayList<>();
+
+        while (!queue.isEmpty()){
+            Tree<E> tree = queue.poll();
+            if (tree._children.isEmpty()){
+                allNodes.add(tree);
+            }
+
+            for (Tree<E> node: tree._children) {
+                queue.offer(node);
+            }
+        }
+        return  allNodes;
     }
 
     @Override

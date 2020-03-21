@@ -42,8 +42,7 @@ public class TreeTest {
                 "14 23",
                 "14 6"
         };
-
-
+        System.out.println(toString());
         TreeFactory treeFactory = new TreeFactory();
         Tree<Integer> tree = treeFactory.createTreeFromStrings(input);
 
