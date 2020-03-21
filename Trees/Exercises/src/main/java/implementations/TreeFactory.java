@@ -25,7 +25,12 @@ public class TreeFactory {
     }
 
     private Tree<Integer> getRoot() {
-        return null;
+        for (Tree<Integer>node: nodesByKeys.values()) {
+            if (node.getParent() == null){
+                return node;
+            }
+        }
+        return  null;
     }
 
     public Tree<Integer> createNodeByKey(int key) {
