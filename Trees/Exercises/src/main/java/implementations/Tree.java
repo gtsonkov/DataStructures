@@ -8,15 +8,15 @@ import java.util.List;
 public class Tree<E> implements AbstractTree<E> {
     private E key;
     private Tree<E> parent;
-    private List<Tree<E>> children;
+    private List<Tree<E>> _children;
 
-    public Tree(E key, Tree<E>...children){
+    public Tree(E key){
         this.key = key;
-        this.children = new ArrayList<>();
-        for (int i = 0; i < children.length ; i++) {
-            children[i].setParent(this);
-            this.children.add(children[i]);
-        }
+        this._children = new ArrayList<>();
+       //for (int i = 0; i < children.length ; i++) {
+       //    children[i].setParent(this);
+       //    this._children.add(children[i]);
+       //}
     }
 
     @Override
@@ -26,7 +26,7 @@ public class Tree<E> implements AbstractTree<E> {
 
     @Override
     public void addChild(Tree<E> child) {
-        this.children.add(child);
+        this._children.add(child);
     }
 
     @Override
@@ -41,8 +41,26 @@ public class Tree<E> implements AbstractTree<E> {
 
     @Override
     public String getAsString() {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        traverseTreeWithRecurtion(sb,0,this);
+        return sb.toString().trim();
     }
+
+    private void traverseTreeWithRecurtion(StringBuilder sb, int intent, Tree<E> eTree) {
+
+        sb
+                .append(this.getPadding(intent))
+                .append(eTree.getKey())
+                .append(System.lineSeparator());
+    }
+
+    private String getPadding(int size){
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i <size ; i++) {
+            sb.append(" ");
+        }
+        return sb.toString();
+            }
 
     @Override
     public List<E> getLeafKeys() {

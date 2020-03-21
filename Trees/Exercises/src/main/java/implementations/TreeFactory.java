@@ -14,7 +14,7 @@ public class TreeFactory {
 
     public Tree<Integer> createTreeFromStrings(String[] input) {
         for (String part:input) {
-           int[]currKeys = Arrays.stream(part.split("\\s+"))
+           int[]currKeys = Arrays.stream(part.split(" "))
                     .mapToInt(Integer::parseInt)
                     .toArray();
            int parentKey = currKeys[0];
