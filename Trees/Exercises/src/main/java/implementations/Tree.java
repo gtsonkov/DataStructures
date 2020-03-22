@@ -73,6 +73,7 @@ public class Tree<E> implements AbstractTree<E> {
     public List<E> getLeafKeys() {
        return getLeafNodesBFS()
                .stream()
+               .filter(tree -> tree._children.isEmpty())
                .map(Tree::getKey)
                .collect((Collectors.toList()));
     }
@@ -84,9 +85,8 @@ public class Tree<E> implements AbstractTree<E> {
 
         while (!queue.isEmpty()){
             Tree<E> tree = queue.poll();
-            if (tree._children.isEmpty()){
+
                 allNodes.add(tree);
-            }
 
             for (Tree<E> node: tree._children) {
                 queue.offer(node);
@@ -97,12 +97,37 @@ public class Tree<E> implements AbstractTree<E> {
 
     @Override
     public List<E> getMiddleKeys() {
-        return null;
+        return getLeafNodesBFS()
+                .stream()
+                .filter(tree -> !(tree._children.isEmpty()) && (tree.parent != null))
+                .map(Tree::getKey)
+                .collect((Collectors.toList()));
     }
 
     @Override
     public Tree<E> getDeepestLeftmostNode() {
-        return null;
+        List<Tree<E>> trees = this.getLeafNodesBFS();
+        int stepToTheTop = 0;
+        Tree<E> bottomLeaf = null;
+        for (Tree<E> tree: trees) {
+            if (isLeaf(tree)) {
+                Tree<E> parent = tree.getParent();
+                int currSteps = 0;
+                while (parent != null) {
+                    currSteps++;
+                    parent = parent.getParent();
+                }
+                if (currSteps > stepToTheTop) {
+                    stepToTheTop = currSteps;
+                    bottomLeaf = tree;
+                }
+            }
+        }
+        return bottomLeaf;
+    }
+
+    private boolean isLeaf(Tree<E> tree) {
+        return tree._children.isEmpty();
     }
 
     @Override
@@ -120,6 +145,3 @@ public class Tree<E> implements AbstractTree<E> {
         return null;
     }
 }
-
-
-
