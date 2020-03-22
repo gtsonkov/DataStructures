@@ -44,7 +44,7 @@ public class TreeTest {
         };
         System.out.println(toString());
         TreeFactory treeFactory = new TreeFactory();
-        Tree<Integer> tree = treeFactory.createTreeFromStrings(input);
+        Tree<Integer> tree_ = treeFactory.createTreeFromStrings(input);
 
         assertEquals("7\r\n" +
                 "  19\r\n" +
@@ -54,7 +54,7 @@ public class TreeTest {
                 "  21\r\n" +
                 "  14\r\n" +
                 "    23\r\n" +
-                "    6", tree.getAsString());
+                "    6", tree_.getAsString());
     }
 
     @Test
@@ -161,6 +161,31 @@ public class TreeTest {
 
         List<List<Integer>> expected =
                 List.of(List.of(7, 19, 1), List.of(7, 14, 6));
+
+        for (int i = 0; i < lists.size(); i++) {
+            assertEquals(expected.get(i), lists.get(i));
+        }
+    }
+
+    @Test
+    public void testPathsWithGivenSum_2() {
+        String[] input = {
+                "7 19",
+                "7 21",
+                "7 14",
+                "19 1",
+                "19 12",
+                "19 31",
+                "14 23",
+                "14 6"
+        };
+        TreeFactory treeFactory = new TreeFactory();
+        Tree<Integer> tree = treeFactory.createTreeFromStrings(input);
+
+        List<List<Integer>> lists = tree.pathsWithGivenSum(7);
+
+        List<List<Integer>> expected =
+                List.of(List.of(7));
 
         for (int i = 0; i < lists.size(); i++) {
             assertEquals(expected.get(i), lists.get(i));
