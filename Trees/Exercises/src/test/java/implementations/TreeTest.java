@@ -182,7 +182,7 @@ public class TreeTest {
         TreeFactory treeFactory = new TreeFactory();
         Tree<Integer> tree = treeFactory.createTreeFromStrings(input);
 
-        List<List<Integer>> lists = tree.pathsWithGivenSum(7);
+        List<List<Integer>> lists = tree.pathsWithGivenSum(20);
 
         List<List<Integer>> expected =
                 List.of(List.of(7));
@@ -211,5 +211,42 @@ public class TreeTest {
         assertTrue(asString.contains("14"));
         assertTrue(asString.contains("23"));
         assertTrue(asString.contains("6"));
+    }
+
+    @Test
+    public void testTreesWithGivenSum_2() {
+        String[] input = {
+                "7 19",
+                "7 21",
+                "7 14",
+                "19 1",
+                "19 12",
+                "19 31",
+                "14 23",
+                "14 24"
+        };
+        TreeFactory treeFactory = new TreeFactory();
+        Tree<Integer> tree = treeFactory.createTreeFromStrings(input);
+        List<Tree<Integer>> trees = tree.subTreesWithGivenSum(61);
+        String asString = trees.get(0).getAsString();
+        assertTrue(asString.contains("14"));
+        assertTrue(asString.contains("23"));
+        assertTrue(asString.contains("24"));
+        assertTrue(asString.contains("7"));
+        assertTrue(asString.contains("19"));
+        assertTrue(asString.contains("21"));
+        assertTrue(asString.contains("14"));
+    }
+    @Test
+    public void testTreesWithGivenSum_3() {
+        String[] input = {
+                "7",
+        };
+        TreeFactory treeFactory = new TreeFactory();
+        Tree<Integer> tree = treeFactory.createTreeFromStrings(input);
+        List<Tree<Integer>> trees = tree.subTreesWithGivenSum(7);
+        String asString = trees.get(0).getAsString();
+        assertTrue(asString.contains("7"));
+
     }
 }

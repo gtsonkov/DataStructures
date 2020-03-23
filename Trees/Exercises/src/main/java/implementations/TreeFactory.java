@@ -18,6 +18,10 @@ public class TreeFactory {
                     .mapToInt(Integer::parseInt)
                     .toArray();
            int parentKey = currKeys[0];
+           if (currKeys.length == 1){
+               this.addEdge(parentKey,0);
+               return getRoot();
+           }
            int childKey = currKeys[1];
            this.addEdge(parentKey,childKey);
         }

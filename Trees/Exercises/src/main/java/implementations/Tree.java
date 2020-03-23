@@ -165,40 +165,31 @@ public class Tree<E> implements AbstractTree<E> {
 
     @Override
     public List<List<E>> pathsWithGivenSum(int sum) {
-        List<List<Tree<E>>> allPhat = new ArrayList<>();
-        Tree<E> currTree = this;
-        List<List<E>> result = new ArrayList<>();
-        List<Tree<E>> currList = new ArrayList<>();
-        getPathWithSumDFS(allPhat,sum,0,currTree,currList);
-        for (List<Tree<E>> list : allPhat) {
-            List<E> currKeys = new ArrayList<>();
-            Collections.reverse(list);
-            for (Tree<E> node:list) {
-                currKeys.add(node.getKey());
-            }
-            result.add(currKeys);
-        }
-
-        return result;
+        getPathWithSumDFS(this);
+        List<List<E>> myList = new ArrayList<>();
+        return myList;
     }
 
-    private void getPathWithSumDFS(List<List<Tree<E>>> mostDeepLeft, int sum, int currPhat, Tree<E> tree, List<Tree<E>> currList) {
+    private void getPathWithSumDFS(Tree<E> tree) {
 
-        if (currPhat == sum){
-            mostDeepLeft.add(currList);
-        }
-
-        for (Tree<E> node: tree._children) {
-            currList.add(tree);
-            getPathWithSumDFS(mostDeepLeft, sum, currPhat += (int)tree.key, node,currList);
-            if (currPhat != sum){
-                currList.remove(tree);
-            }
-        }
     }
 
     @Override
     public List<Tree<E>> subTreesWithGivenSum(int sum) {
-        return null;
+        List<Tree<E>> result = new ArrayList<>();
+        Deque<Tree<E>> trees = new ArrayDeque<>();
+        trees.offer(this);
+        while (!trees.isEmpty()){
+            Tree<E> current = trees.poll();
+            int currSum = (int) current.getKey();
+            for (Tree<E> child : current._children) {
+                trees.offer(child);
+                currSum += (int) child.getKey();
+            }
+            if (currSum == sum){
+                result.add(current);
+            }
+        }
+        return result;
     }
 }
