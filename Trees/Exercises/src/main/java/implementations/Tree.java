@@ -175,26 +175,66 @@ public class Tree<E> implements AbstractTree<E> {
     }
 
     @Override
+    //TODO return parts from the tree, witch match the sense.
     public List<Tree<E>> subTreesWithGivenSum(int sum) {
         List<Tree<E>> result = new ArrayList<>();
+        int[] total = new int[1];
+        total[0] = 0;
+        //subTreeSumBFS(this,sum,result);
+        Deque<Tree<E>> deque = new ArrayDeque<>();
+        deque.offer(this);
+        Tree<E> tempNode = null;
+        while (!deque.isEmpty()){
+            Tree<E>currentNode = deque.poll();
+
+            for (Tree<E> node:currentNode._children) {
+                deque.offer(node);
+                subTreeSumDFS(node,sum,result,total,tempNode);
+            }
+        }
+
+        return result;
+    }
+    
+    private void subTreeSumBFS(Tree<E> tree, int sum, List<Tree<E>> result){
         Deque<Tree<E>> trees = new ArrayDeque<>();
-        trees.offer(this);
-        int allTreeSum = (int) this.getKey();
+
+        trees.offer(tree);
+        Tree<E> currParent = tree;
+
+        int currSum = (int) tree.getKey();
+
         while (!trees.isEmpty()){
             Tree<E> current = trees.poll();
-            int currSum = (int) current.getKey();
+            List<Tree<E>> newChildren = new ArrayList<>();
             for (Tree<E> child : current._children) {
+                newChildren.add(child);
                 trees.offer(child);
                 currSum += (int) child.getKey();
-                allTreeSum += (int) child.getKey();
-            }
-            if (currSum == sum){
-                result.add(current);
+                if (currSum == sum){
+                    Tree<E> newTree = tree;
+                    current._children = newChildren;
+                    result.add(newTree);
+                    sum = 0;
+                }
             }
         }
-        if (allTreeSum == sum){
-            result.add(this);
+        result.size();
+    }
+    
+    private void subTreeSumDFS(Tree<E> tree, int sum, List<Tree<E>> result, int[] total, Tree<E>tempNode){
+        int currentSum = (int) tree.getKey();
+
+        for (Tree<E> child: tree._children) {
+            currentSum += (int) child.getKey();
+            subTreeSumDFS(child,sum,result,total,tempNode);
         }
-        return result;
+
+        total[0] += (int) tree.getKey();
+
+        if (currentSum == sum || total[0] == sum){
+            result.add(tree.parent);
+            total[0] = 0;
+        }
     }
 }
