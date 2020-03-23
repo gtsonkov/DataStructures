@@ -240,13 +240,14 @@ public class TreeTest {
     @Test
     public void testTreesWithGivenSum_3() {
         String[] input = {
-                "7",
+                "0 1",
+                "0 2",
+                "1 3"
         };
         TreeFactory treeFactory = new TreeFactory();
         Tree<Integer> tree = treeFactory.createTreeFromStrings(input);
-        List<Tree<Integer>> trees = tree.subTreesWithGivenSum(7);
+        List<Tree<Integer>> trees = tree.subTreesWithGivenSum(6);
         String asString = trees.get(0).getAsString();
         assertTrue(asString.contains("7"));
-
     }
 }

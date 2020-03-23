@@ -179,16 +179,21 @@ public class Tree<E> implements AbstractTree<E> {
         List<Tree<E>> result = new ArrayList<>();
         Deque<Tree<E>> trees = new ArrayDeque<>();
         trees.offer(this);
+        int allTreeSum = (int) this.getKey();
         while (!trees.isEmpty()){
             Tree<E> current = trees.poll();
             int currSum = (int) current.getKey();
             for (Tree<E> child : current._children) {
                 trees.offer(child);
                 currSum += (int) child.getKey();
+                allTreeSum += (int) child.getKey();
             }
             if (currSum == sum){
                 result.add(current);
             }
+        }
+        if (allTreeSum == sum){
+            result.add(this);
         }
         return result;
     }
