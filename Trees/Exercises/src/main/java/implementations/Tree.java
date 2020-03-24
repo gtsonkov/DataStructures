@@ -213,7 +213,7 @@ public class Tree<E> implements AbstractTree<E> {
 
                 if (currSum == sum){
                     if (tmp != null){
-                        if ((int) tmp.getKey() == 0){
+                        if ((int) tmp.getKey() == 0 && tmp.getParent() == null){
                             current.add(tmp.getKey());
                             Collections.reverse(current);
                             myList.add(current);
