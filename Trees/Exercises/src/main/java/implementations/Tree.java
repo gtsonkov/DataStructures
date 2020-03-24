@@ -75,6 +75,14 @@ public class Tree<E> implements AbstractTree<E> {
                .collect((Collectors.toList()));
     }
 
+    private List<Tree<E>> getAllLeafs(Tree<E> root) {
+
+       return  getLeafNodesBFS(root)
+                .stream()
+                .filter(tree -> tree._children.isEmpty())
+                .collect((Collectors.toList()));
+    }
+
     private List<Tree<E>> getLeafNodesBFS(){
         Deque<Tree<E>> queue = new ArrayDeque<>();
         queue.offer(this);
@@ -84,6 +92,23 @@ public class Tree<E> implements AbstractTree<E> {
             Tree<E> tree = queue.poll();
 
                 allNodes.add(tree);
+
+            for (Tree<E> node: tree._children) {
+                queue.offer(node);
+            }
+        }
+        return  allNodes;
+    }
+
+    private List<Tree<E>> getLeafNodesBFS(Tree<E> root){
+        Deque<Tree<E>> queue = new ArrayDeque<>();
+        queue.offer(root);
+        List<Tree<E>> allNodes = new ArrayList<>();
+
+        while (!queue.isEmpty()){
+            Tree<E> tree = queue.poll();
+
+            allNodes.add(tree);
 
             for (Tree<E> node: tree._children) {
                 queue.offer(node);
@@ -165,14 +190,43 @@ public class Tree<E> implements AbstractTree<E> {
 
     @Override
     public List<List<E>> pathsWithGivenSum(int sum) {
-        getPathWithSumDFS(this);
+        int[] currSum = new int [1];
+        List<E> tmpList = new ArrayList<>();
         List<List<E>> myList = new ArrayList<>();
+        getPathWithSum(this,sum,myList);
         return myList;
     }
 
-    private void getPathWithSumDFS(Tree<E> tree) {
+    private void getPathWithSum(Tree<E> tree, int sum, List<List<E>> myList) {
+        List<Tree<E>> allLeafs = getAllLeafs(tree);
+        for (Tree<E> node: allLeafs) {
+            int currSum = (int) node.getKey();
+            List<E> current = new ArrayList<>();
+            Tree<E> parent = node.parent;
+            current.add(node.getKey());
+            while (parent != null){
+                E currNodeKey = parent.getKey();
+                currSum += (int) currNodeKey;
+                current.add(currNodeKey);
+                Tree<E> tmp = parent.parent;
+                parent = tmp;
 
+                if (currSum == sum){
+                    if (tmp != null){
+                        if ((int) tmp.getKey() == 0){
+                            current.add(tmp.getKey());
+                            Collections.reverse(current);
+                            myList.add(current);
+                            return;
+                        }
+                    }
+                    Collections.reverse(current);
+                    myList.add(current);
+                }
+            }
+        }
     }
+
 
     @Override
     //TODO return parts from the tree, witch match the sense.

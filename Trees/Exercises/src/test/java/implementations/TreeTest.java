@@ -145,19 +145,14 @@ public class TreeTest {
     @Test
     public void testPathsWithGivenSum() {
         String[] input = {
-                "7 19",
-                "7 21",
-                "7 14",
-                "19 1",
-                "19 12",
-                "19 31",
-                "14 23",
-                "14 6"
+                "0 1",
+                "0 2",
+                "1 3"
         };
         TreeFactory treeFactory = new TreeFactory();
         Tree<Integer> tree = treeFactory.createTreeFromStrings(input);
 
-        List<List<Integer>> lists = tree.pathsWithGivenSum(27);
+        List<List<Integer>> lists = tree.pathsWithGivenSum(4);
 
         List<List<Integer>> expected =
                 List.of(List.of(7, 19, 1), List.of(7, 14, 6));
