@@ -145,18 +145,23 @@ public class TreeTest {
     @Test
     public void testPathsWithGivenSum() {
         String[] input = {
-                "0 1",
-                "0 2",
-                "1 3"
+                "7 19",
+                "7 21",
+                "7 14",
+                "19 1",
+                "19 12",
+                "19 31",
+                "14 23",
+                "14 6"
         };
         TreeFactory treeFactory = new TreeFactory();
         Tree<Integer> tree = treeFactory.createTreeFromStrings(input);
 
-        List<List<Integer>> lists = tree.pathsWithGivenSum(4);
+        List<List<Integer>> lists = tree.pathsWithGivenSum(27);
 
         List<List<Integer>> expected =
                 List.of(List.of(7, 19, 1), List.of(7, 14, 6));
-
+        assertTrue(lists.size() == 2);
         for (int i = 0; i < lists.size(); i++) {
             assertEquals(expected.get(i), lists.get(i));
         }
@@ -180,8 +185,30 @@ public class TreeTest {
         List<List<Integer>> lists = tree.pathsWithGivenSum(20);
 
         List<List<Integer>> expected =
-                List.of(List.of(7));
+                List.of(List.of(19, 1), List.of(14, 6));
+        assertTrue(lists.size() == 2);
+        for (int i = 0; i < lists.size(); i++) {
+            assertEquals(expected.get(i), lists.get(i));
+        }
+    }
 
+    @Test
+    public void testPathsWithGivenSum_3() {
+        String[] input = {
+                "0 5",
+                "0 6",
+                "0 8",
+                "5 6",
+                "6 8"
+        };
+        TreeFactory treeFactory = new TreeFactory();
+        Tree<Integer> tree = treeFactory.createTreeFromStrings(input);
+
+        List<List<Integer>> lists = tree.pathsWithGivenSum(11);
+
+        List<List<Integer>> expected =
+                List.of(List.of(0, 5, 6));
+        assertTrue(lists.size() == 1);
         for (int i = 0; i < lists.size(); i++) {
             assertEquals(expected.get(i), lists.get(i));
         }
