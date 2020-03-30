@@ -25,16 +25,15 @@ public class MaxHeap<E extends Comparable<E>> implements Heap<E> {
     }
 
     private void heaapifyUp(int index) {
-        int parentIndex = getParentIndex(index);
-        while (index > 0 && isLess(index,parentIndex)){
-            Collections.swap(this.elements,index,parentIndex);
-            index = parentIndex;
+        while (index > 0 && isLess(getParentIndex(index),index)){
+            Collections.swap(this.elements,index,getParentIndex(index));
+            index = getParentIndex(index);
         }
     }
 
-    private boolean isLess(int childIndex, int parentIndex) {
+    private boolean isLess(int firstIndex, int secondIndex) {
 
-        return  getAt(childIndex).compareTo(getAt(parentIndex)) > 0;
+        return  getAt(firstIndex).compareTo(getAt(secondIndex)) < 0;
     }
 
     private E getAt(int index){
