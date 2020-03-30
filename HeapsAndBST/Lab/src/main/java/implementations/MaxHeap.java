@@ -47,6 +47,9 @@ public class MaxHeap<E extends Comparable<E>> implements Heap<E> {
 
     @Override
     public E peek() {
+        if (size() == 0){
+            throw new IllegalStateException("No elements in Heep");
+        }
         return this.elements.get(0);
     }
 }
