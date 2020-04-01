@@ -1,5 +1,3 @@
-import org.apache.commons.collections.functors.IfClosure;
-
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -9,7 +7,7 @@ import java.util.List;
 
 public class BinarySearchTree<E extends Comparable<E>> {
     public BinarySearchTree(){
-        this.root = new Node<>();
+
     }
 
     public BinarySearchTree(E element){
@@ -18,7 +16,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     public BinarySearchTree(Node <E> node){
         this.root = new Node<>(node);
-
     }
 
     private Node<E> root;
@@ -27,19 +24,17 @@ public class BinarySearchTree<E extends Comparable<E>> {
         private E value;
         private Node<E> leftChild;
         private Node<E> rightChild;
-
-        public Node(){
-            this.rightChild = null;
-            this.leftChild = null;
-        }
+        public int count;
 
 		public Node(E value) {
             this.value = value;
+             count = 1;
         }
 
         public Node(Node<E> node){
 		    this.value = node.getValue();
-		    if (node.getLeft() != null){
+            this.count = node.count;
+            if (node.getLeft() != null){
 		        this.leftChild = node.leftChild;
             }
             if (node.getLeft() != null){
@@ -78,7 +73,11 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
 
     public void insert(E element) {
-        insertInTo(this.root, element);
+        if(this.root == null){
+            this.root = new Node<>(element);
+        } else {
+            insertInTo(this.root, element);
+        }
     }
 
     private void insertInTo(Node<E> node, E element) {
@@ -97,6 +96,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
          } else {
             //Do Nothing
         }
+        node.count++;
     }
 
     public boolean contains(E element) {
@@ -135,6 +135,9 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     public List<E> range(E first, E second) {
         List<E> result = new ArrayList<>();
+        if (this.root == null){
+            return  result;
+        }
         // nodePreOrderRange(this.root,result,first,second);
         Deque<Node<E>> queue = new ArrayDeque<>();
         queue.offer(this.root);
@@ -176,16 +179,41 @@ public class BinarySearchTree<E extends Comparable<E>> {
         if(this.root == null){
             throw  new IllegalStateException("Can not delete from empty tree");
         }
+        Node<E> current = this.root;
+        if(current.getLeft() == null){
+            this.root = this.root.getRight();
+            return;
+        }
+        while (current.getLeft().getLeft() != null){
+            current.count--;
+            current= current.getLeft();
+        }
+        current.rightChild = current.leftChild.rightChild;
+        current.leftChild = null;
     }
 
     public void deleteMax() {
         if(this.root == null){
             throw  new IllegalStateException("Can not delete from empty tree");
         }
+        Node<E> current = this.root;
+        if(current.getRight() == null){
+            this.root = this.root.getLeft();
+            return;
+        }
+        while (current.getRight().getRight() != null){
+            current.count--;
+            current= current.getRight();
+        }
+        current.leftChild = current.getRight().leftChild;
+        current.rightChild = null;
     }
 
     public int count() {
-        return 0;
+        if(this.root == null){
+            return 0;
+        }
+        return this.root.count;
     }
 
     public int rank(E element) {
