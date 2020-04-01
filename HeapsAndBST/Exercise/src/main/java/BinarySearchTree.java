@@ -188,8 +188,8 @@ public class BinarySearchTree<E extends Comparable<E>> {
             current.count--;
             current= current.getLeft();
         }
+        current.count--;
         current.rightChild = current.leftChild.rightChild;
-        current.leftChild = null;
     }
 
     public void deleteMax() {
@@ -205,8 +205,8 @@ public class BinarySearchTree<E extends Comparable<E>> {
             current.count--;
             current= current.getRight();
         }
-        current.leftChild = current.getRight().leftChild;
-        current.rightChild = null;
+        current.count--;
+        current.leftChild = current.rightChild.leftChild;
     }
 
     public int count() {
@@ -217,15 +217,70 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
 
     public int rank(E element) {
-        return 0;
+        return nodeRank(this.root,element);
+    }
+
+    private int nodeRank(Node<E> node, E element) {
+        if(this.root == null){
+            return 0;
+        }
+        if(isSmaller(node.getValue(),element)){
+            return nodeRank(node.getLeft(),element);
+        }else if(isEqual(node.getValue(),element)){
+            return node.getLeft() == null ? 0 : node.getLeft().count;
+        }
+        return node.getLeft() == null ? 0 : node.getLeft().count + 1 + nodeRank(node.getRight(),element);
     }
 
     public E ceil(E element) {
-        return null;
+        if (this.root == null){
+            return null;
+        }
+        Node<E> current = this.root;
+        Node<E> nearestBigger = null;
+
+        while (current != null){
+            if (isSmaller(element, current.getValue())){
+                nearestBigger = current;
+                current = current.getLeft();
+            }else if(isGreater(element,current.getValue())){
+                current = current.getRight();
+            } else {
+                Node<E> right = current.getRight();
+                if (right != null && nearestBigger != null){
+                    nearestBigger = isSmaller(right.getValue(),nearestBigger.getValue()) ? right : nearestBigger;
+                } else if (nearestBigger == null){
+                    nearestBigger = right;
+                }
+                break;
+            }
+        }
+        return nearestBigger == null ? null : nearestBigger.getValue();
     }
 
     public E floor(E element) {
-        return null;
+        if (this.root == null){
+            return null;
+        }
+        Node<E> current = this.root;
+        Node<E> nearestSmaller = null;
+        while(current != null) {
+            if (isGreater(element, current.getValue())) {
+                nearestSmaller = current;
+                current = current.getRight();
+            } else if (isSmaller(element, current.getValue())) {
+                current = current.getLeft();
+            } else {
+                Node<E> left = current.getLeft();
+                 if(nearestSmaller == null){
+                    nearestSmaller = left;
+                }else if(left!=null && nearestSmaller != null){
+                    nearestSmaller = isGreater(left.getValue(),nearestSmaller.getValue()) ? left: nearestSmaller;
+                }
+                 break;
+            }
+        }
+       return nearestSmaller == null ? null : nearestSmaller.getValue();
     }
 
     private boolean isGreater(E element, E value) {
