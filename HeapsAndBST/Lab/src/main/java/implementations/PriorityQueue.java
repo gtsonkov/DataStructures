@@ -53,16 +53,6 @@ public class PriorityQueue<E extends Comparable<E>> implements AbstractQueue<E> 
         }
     }
 
-    private E getLeftChild(int index){
-
-        return this.elements.get(this.getLeftChildIndex(index));
-    }
-
-    private E getRightChild(int index){
-
-        return this.elements.get(this.getRightChildIndex(index));
-    }
-
     private int getLeftChildIndex(int index){
         return 2 * index + 1;
     }
