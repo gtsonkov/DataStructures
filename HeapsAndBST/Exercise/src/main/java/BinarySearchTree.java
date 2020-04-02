@@ -224,12 +224,16 @@ public class BinarySearchTree<E extends Comparable<E>> {
         if(this.root == null){
             return 0;
         }
-        if(isSmaller(node.getValue(),element)){
-            return nodeRank(node.getLeft(),element);
-        }else if(isEqual(node.getValue(),element)){
+        if(isSmaller(element,node.getValue())){
+            return nodeRank(node.getLeft(), element);
+        }else if(isEqual(element,node.getValue())){
             return node.getLeft() == null ? 0 : node.getLeft().count;
         }
-        return node.getLeft() == null ? 0 : node.getLeft().count + 1 + nodeRank(node.getRight(),element);
+        return getNodeLeftCount(node.getLeft()) +1 + nodeRank(node.getRight(),element);
+    }
+
+    private int getNodeLeftCount(Node<E> node){
+        return node==null ? 0 : node.count;
     }
 
     public E ceil(E element) {
