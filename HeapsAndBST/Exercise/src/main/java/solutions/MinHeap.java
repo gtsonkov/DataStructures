@@ -22,19 +22,7 @@ public class MinHeap<E extends Comparable<E> & Decrease<E>> implements Heap<E> {
     @Override
     public void add(E element) {
         this.data.add(element);
-        heapifyUp();
-    }
-
-    private void heapifyUp() {
-        int index = this.size()-1;
-        int parentIndex = this.getParentIndexFor(index);
-
-
-        while (index > 0 && isLess(index, parentIndex)){
-            Collections.swap(this.data, index, parentIndex);
-            index = parentIndex;
-            parentIndex = this.getParentIndexFor(index);
-        }
+        heapifyUp(this.size()-1);
     }
 
     private boolean isLess(int indexFirst, int indexSecond) {
@@ -62,12 +50,11 @@ public class MinHeap<E extends Comparable<E> & Decrease<E>> implements Heap<E> {
         enshureNonEmpty();
         Collections.swap(this.data, 0, data.size()-1);
         E toRemove = this.data.remove(this.data.size()-1);
-        heapyfyDown();
+        heapyfyDown(0);
         return toRemove;
     }
 
-    private void heapyfyDown() {
-        int index = 0;
+    private void heapyfyDown(int index) {
         int leftChildIndex = getLeftChildIndex(index);
         while(leftChildIndex < this.data.size()){
             int swapIndex = leftChildIndex;
@@ -86,6 +73,16 @@ public class MinHeap<E extends Comparable<E> & Decrease<E>> implements Heap<E> {
         }
     }
 
+    private void heapifyUp(int index) {
+        int parentIndex = this.getParentIndexFor(index);
+
+        while (index > 0 && isLess(index, parentIndex)){
+            Collections.swap(this.data, index, parentIndex);
+            index = parentIndex;
+            parentIndex = this.getParentIndexFor(index);
+        }
+    }
+
     private int getLeftChildIndex(int index) {
         return 2 * index + 1;
     }
@@ -96,6 +93,9 @@ public class MinHeap<E extends Comparable<E> & Decrease<E>> implements Heap<E> {
 
     @Override
     public void decrease(E element) {
-
+        int elementIndex = this.data.indexOf(element);
+        E heapElement = this.data.get(elementIndex);
+        heapElement.decrease();
+        this.heapifyUp(elementIndex);
     }
 }
