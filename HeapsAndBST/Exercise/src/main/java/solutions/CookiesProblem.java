@@ -21,7 +21,6 @@ public class CookiesProblem {
         }
         return currMin > requiredSweetness ? steps : -1;
     }
-
 }
 
 class MinHeap_intern<E extends Comparable<E>>{
